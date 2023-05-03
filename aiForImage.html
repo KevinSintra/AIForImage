@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+  <!-- <script src="https://code.jquery.com/jquery-3.6.3.js"></script> -->
+  <link rel="stylesheet" href="css/all.css">
+  <title>Prompt Input and Image Display</title>
+  <style>
+
+    /* 容器組成 */
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      height: 40.33vh;
+      padding: 4% 0;
+    }
+
+    .leftDiv {
+      height: 100%;
+      width: 35%;
+      margin-right: 6.66%;
+      background-color: #666666;
+      border: none;
+      border-radius: 5px;
+    }
+
+    .rightDiv {
+      height: 100%;
+      width: 35%;
+      background-color: #666666;
+      border: none;
+      border-radius: 5px;
+    }
+
+    #thumbnail {
+      height: 100%;
+      width: 100%;
+      border-radius: 5px;
+    }
+
+    iframe {
+      position: flex;
+      top: 0;
+      left: 0;
+      width: 75%;
+      height: 60.33vh;
+      border: none;
+      z-index: -1;
+      background-color: #666666;
+      border: none;
+      border-radius: 5px;
+    }
+
+    /* loading spinner */
+    #loadingOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.5);
+      z-index: 9999;
+      display: none;
+    }
+
+    #loadingSpinner {
+      border: 16px solid #f3f3f3;
+      border-top: 16px solid #3498db;
+      border-radius: 50%;
+      width: 120px;
+      height: 120px;
+      animation: spin 2s linear infinite;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .prompt {
+      height: 100%;
+      width: 100%;
+      background-color: #a9a9a9;
+      border: none;
+      border-radius: 5px;
+      color: #1100ff;
+      font-size: 1.5em;
+      font-weight: bold;
+      resize: none;
+    }
+
+    textarea::placeholder {
+      color: #1100ff;
+    }
+
+    .button {
+      display: inline-block;
+      margin-top: 1.5%;
+      padding: 0.5em 1em;
+      background-color: #ffffff;
+      border: none;
+      border-radius: 5px;
+      color: #333333;
+      font-size: 1em;
+      font-weight: bold;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <div class="leftDiv">
+      <textarea id="input-prompt" class="prompt" placeholder="請輸入 prompt..."></textarea>
+      <button class="button" onclick="displayImage2()">生成</button>
+    </div>
+
+    <div class="rightDiv">
+      <img id="thumbnail"></img>
+      <div id="download-div" hidden="hidden"><a id="download-hyperlink" class="button">下載</a></div>
+    </div>
+
+  </div>
+
+  <iframe title="Texture Prompt Library"
+    style="background: #000000;"
+    src="https://v2-embednotion.com/Texture-Library-bb9793325b834e10b029716eb4c04a87">
+  </iframe>
+
+  <div id="loadingOverlay">
+    <div id="loadingSpinner"></div>
+  </div>
+
+  <script>
+
+    function displayImage() {
+      const imageUrl = document.getElementById('input-prompt').value;
+      // const imageUrl = `https://source.unsplash.com/800x800/?${promptInput}`;
+      const image = new Image();
+      image.crossOrigin = "anonymous";
+      image.onload = function () {
+        const canvas = document.createElement('canvas');
+        const thumbnail = document.getElementById('thumbnail');
+        const ctx = canvas.getContext('2d');
+        canvas.width = 200; // width of thumbnail
+        canvas.height = 200; // height of thumbnail
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+        thumbnail.src = canvas.toDataURL();
+      };
+      image.src = imageUrl;
+    }
+
+    function displayImage2() {
+      const prompt = document.getElementById('input-prompt').value;
+      getTxt2ImgV2(prompt);
+    }
+
+    function base64ToHtmlImg(imageObj, base64FromImg) {
+      imageObj.setAttribute('src', "data:image/png;base64," + base64FromImg);
+    }
+
+    function base64ToDownload(base64FromImg) {
+      // const href = 'data:application/octet-stream;base64,' + base64FromImg;
+      // window.location.href = href;
+      var a = document.getElementById("download-hyperlink");
+      a.href = "data:image/png;base64," + base64FromImg; //Image Base64 Goes here
+      a.download = "Image.png"; //File name Here
+      var a_div = document.getElementById("download-div");
+      a_div.hidden = false;
+      // a.click(); //Downloaded file
+    }
+
+    function getTxt2ImgV2(prompt) {
+      // use jquery post
+      const settings = {
+        "url": "http://10.2.32.42:7860/sdapi/v1/txt2img",
+        // "url": "https://9e94bedd-b471-415a.gradio.live/sdapi/v1/txt2img",
+        "method": "POST",
+        "crossDomain": true,
+        "timeout": 0,
+        "headers": {
+          "Content-Type": "application/json",
+          "Accept": "*/*",
+          "Access-Control-Allow-Origin": "*"
+        },
+        "data": JSON.stringify({
+          "enable_hr": false,
+          "denoising_strength": 0,
+          "firstphase_width": 0,
+          "firstphase_height": 0,
+          "hr_scale": 2,
+          "hr_upscaler": "",
+          "hr_second_pass_steps": 0,
+          "hr_resize_x": 0,
+          "hr_resize_y": 0,
+          "prompt": prompt,
+          "styles": [
+            ""
+          ],
+          "seed": -1,
+          "subseed": -1,
+          "subseed_strength": 0,
+          "seed_resize_from_h": -1,
+          "seed_resize_from_w": -1,
+          "sampler_name": "DPM++ 2M Karras",
+          "batch_size": 1,
+          "n_iter": 1,
+          "steps": 30,
+          "cfg_scale": 9,
+          "width": 512,
+          "height": 512,
+          "restore_faces": false,
+          "tiling": true,
+          "do_not_save_samples": false,
+          "do_not_save_grid": false,
+          "negative_prompt": "",
+          "eta": 0,
+          "s_churn": 0,
+          "s_tmax": 0,
+          "s_tmin": 0,
+          "s_noise": 1,
+          "override_settings": {},
+          "override_settings_restore_afterwards": true,
+          "script_args": [],
+          "sampler_index": "DPM++ 2M Karras",
+          "script_name": "",
+          "send_images": true,
+          "save_images": false,
+          "alwayson_scripts": {}
+        }),
+      };
+
+      showLoading();
+
+      $.ajax(settings).done(function (response) {
+        const base64 = response['images'][0];
+        const imageObj = document.getElementById('thumbnail');
+        base64ToHtmlImg(imageObj, base64);
+        base64ToDownload(base64);
+        disableLoading();
+      });
+    }
+
+    function showLoading() {
+      document.querySelectorAll('input, textarea, button, select').forEach(el => {
+        el.disabled = true;
+      });
+
+      const loadingOverlay = document.getElementById('loadingOverlay');
+      loadingOverlay.style.display = 'block';
+    }
+
+    function disableLoading() {
+      document.querySelectorAll('input, textarea, button, select').forEach(el => {
+        el.disabled = false;
+      });
+
+      const loadingOverlay = document.getElementById('loadingOverlay');
+      loadingOverlay.style.display = 'none';
+    }
+
+  </script>
+</body>
+
+</html>

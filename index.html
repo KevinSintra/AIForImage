@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>i-magek</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+    <script src="js/navbar.js"></script>
+    <link rel="stylesheet" href="css/all.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <style>
+        #header {
+            display: flex;
+            flex-direction: column;
+        }
+
+        #index_iframe {
+            flex: 1;
+            align-self: flex-end;
+            width: 100%;
+            height: 90vh;
+            border: none;
+            z-index: -1;
+            background-color: #666666;
+            border: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <p>無限你的創意</p>
+    </div>
+
+    <div id="navbar">
+        <a class="active" href="javascript:changeIframeSrc(0)">紋理</a>
+        <a href="javascript:changeIframeSrc(1)">放大</a>
+    </div>
+
+    <iframe id="index_iframe" src="aiForImage.html"></iframe>
+
+    <script>
+        function changeIframeSrc(index) {
+            var iframe = document.getElementById("index_iframe");
+            if (index == 0) {
+                iframe.src = "aiForImage.html";
+            } else if (index == 1) {
+                iframe.src = "aiForScale.html";
+            }
+        }
+    </script>
+</body>
+
+</html>
