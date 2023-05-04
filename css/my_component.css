@@ -1,3 +1,6 @@
+/* 集中放置所有 component */
+
+/* navbar - start */
 .header {
     background-color: #333333;
     color: #ffffff;
@@ -33,3 +36,29 @@
     background-color: #04AA6D;
     color: white;
 }
+
+/* navbar - end */
+
+
+/* dropdown list - start */
+.select-box .select {
+    background-color: #777;
+    color: #fff;
+    width: 100%;
+    font-weight: bold;
+    border: #000 2px solid;
+    border-radius: 5px;
+}
+
+.prompt {
+    margin-top: 10px;
+    background-color: #f7f7f7;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* dropdown list - end */
+
+
+/* - start */
+/* - end */
