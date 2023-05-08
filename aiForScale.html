@@ -4,17 +4,153 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"
+    integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+  <script src="js/my_component.js"></script>
   <link rel="stylesheet" href="css/clear_all_style.css">
+  <link rel="stylesheet" href="css/my_component.css">
   <title>AI For Scale Up</title>
 
+  <style>
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .left,
+    .right {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .left {
+      margin-right: 50px;
+    }
+
+    .upload-area {
+      margin-bottom: 20px;
+    }
+
+    .preview-area {
+      width: 512px;
+      height: 512px;
+      border: 1px solid black;
+    }
+
+    .right {
+      width: 512px;
+      height: 512px;
+      border: 1px solid black;
+    }
+
+    .enlarge-area {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .enlarge-area img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+
+    .download-area {
+      margin-top: 20px;
+    }
+  </style>
 </head>
 
 <body>
-    <section style="padding: 30px; font-family: sans-serif; font-size: 24px;">
-        <h2>功能正在施工中，敬請期待</h2>
-        <h4>使小圖放大後可被列印</h4>
-    </section>
+  <div class="container">
+    <div class="left">
+      <div class="upload-area">
+        <label for="file-input">Upload Image</label>
+        <input type="file" id="file-input" accept="image/*">
+      </div>
+      <div class="preview-area">
+        <img id="preview" />
+      </div>
+    </div>
+    <div class="right">
+      <div class="enlarge-area">
+        <img id="enlarge" />
+      </div>
+      <div class="download-area">
+        <a href="#" download>Download Image</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const fileInput = document.getElementById("file-input");
+    fileInput.addEventListener("change", function () {
+      const file = this.files[0];
+
+      if (file) {
+
+        const preview = document.getElementById("preview");
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+
+        reader.onload = function () {
+          showLoading();
+          const base64String = reader.result.split(',')[1];
+          preview.src = "data:image/png;base64," + base64String;
+          sendBase64ToServer(base64String);
+        };
+
+      }
+    });
+
+    function sendBase64ToServer(base64String) {
+      var settings = {
+        "url": "http://10.2.32.42:7860/sdapi/v1/extra-single-image",
+        "method": "POST",
+        "crossDomain": true,
+        "timeout": 0,
+        "headers": {
+          "Content-Type": "application/json",
+          "Accept": "*/*",
+          "Access-Control-Allow-Origin": "*"
+        },
+        "data": JSON.stringify({
+          "resize_mode": 0,
+          "show_extras_results": true,
+          "gfpgan_visibility": 0,
+          "codeformer_visibility": 0,
+          "codeformer_weight": 0,
+          "upscaling_resize": 4,
+          "upscaling_resize_w": 512,
+          "upscaling_resize_h": 512,
+          "upscaling_crop": true,
+          "upscaler_1": "ESRGAN_4x",
+          "upscaler_2": "None",
+          "extras_upscaler_2_visibility": 0,
+          "upscale_first": false,
+          "image": base64String
+        }),
+      };
+
+      $.ajax(settings).done(function (response) {
+        const enlarge = document.getElementById("enlarge");
+        const downloadLink = document.querySelector(".download-area a");
+
+        const resultInfo = response["html_info"];
+        const imageBase64Info = response["image"];
+        enlarge.src = "data:image/png;base64," + imageBase64Info;
+        downloadLink.href = "data:image/png;base64," + imageBase64Info;
+        downloadLink.download = "image.png";
+        disableLoading();
+      });
+    }
+
+  </script>
 </body>
 
 </html>
