@@ -3,47 +3,16 @@
 
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
-  <!-- <script src="https://code.jquery.com/jquery-3.6.3.js"></script> -->
   <link rel="stylesheet" href="css/clear_all_style.css">
+  <link rel="stylesheet" href="css/txt2img.css">
+  <link rel="stylesheet" href="css/my_component.css">
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"
+  integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+  <script src="js/my_component.js"></script>
   <title>Prompt Input and Image Display</title>
   <style>
-
-    /* 容器組成 */
-    .container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: center;
-      height: 44.33vh;
-      padding: 0 0;
-      margin: 3% 0;
-    }
-
-    .leftDiv {
-      height: 100%;
-      width: 35%;
-      margin-right: 6.66%;
-      background-color: #666666;
-      border: none;
-      border-radius: 5px;
-    }
-
-    .rightDiv {
-      height: 100%;
-      width: 30%;
-      background-color: #666666;
-      border: none;
-      border-radius: 5px;
-    }
-
-    #thumbnail {
-      height: 100%;
-      width: 100%;
-      border-radius: 5px;
-    }
-
     iframe {
       position: flex;
       top: 0;
@@ -57,98 +26,166 @@
       border: none;
       border-radius: 5px;
     }
-
-    /* loading spinner */
-    #loadingOverlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(255, 255, 255, 0.5);
-      z-index: 9999;
-      display: none;
-    }
-
-    #loadingSpinner {
-      border: 16px solid #f3f3f3;
-      border-top: 16px solid #3498db;
-      border-radius: 50%;
-      width: 120px;
-      height: 120px;
-      animation: spin 2s linear infinite;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
-
-    @keyframes spin {
-      0% {
-        transform: rotate(0deg);
-      }
-
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-
-    .prompt {
-      height: 100%;
-      width: 100%;
-      background-color: #a9a9a9;
-      border: none;
-      border-radius: 5px;
-      color: #1100ff;
-      font-size: 1.5em;
-      font-weight: bold;
-      resize: none;
-    }
-
-    textarea::placeholder {
-      color: #1100ff;
-    }
-
-    .button {
-      display: inline-block;
-      margin-top: 1.5%;
-      padding: 0.5em 1em;
-      background-color: #ffffff;
-      border: none;
-      border-radius: 5px;
-      color: #333333;
-      font-size: 1em;
-      font-weight: bold;
-      text-align: center;
-      text-decoration: none;
-      cursor: pointer;
-    }
   </style>
 </head>
 
-<body>
-  <div class="container">
+<body style="background: #f7f9fb; background-color: #f7f9fb;">
 
-    <div class="leftDiv">
-      <textarea id="input-prompt" class="prompt" placeholder="請輸入 prompt..."></textarea>
-      <button class="button" onclick="displayImage2()">生成</button>
+  <div class="_3">
+    <div class="frame-109">
+      <div class="frame-2">
+        <div class="image-ai">Image AI</div>
+
+        <div class="easy-to-make-textures">Easy to make textures</div>
+      </div>
+
+      <div class="frame-100">
+
+        <div class="frame-102">
+          <div class="frame-1">
+            <!-- <img class="img-frame-104" src="frame-104.png" onclick="window.open(this.src)" />
+            <img class="img-frame-104" src="frame-105.png" onclick="window.open(this.src)" /> -->
+          </div>
+        </div>
+
+        <div class="text-field">
+          <textarea id="input-prompt" class="input-prompt" placeholder="請輸入 prompt..."></textarea>
+          <button class="button-filled" onclick="displayImage2()">產生</button>
+        </div>
+
+      </div>
+
+      <div class="frame-99">
+        <div class="button-filled2">
+          <div class="label2">進階</div>
+
+          <svg class="system-icon-outlined" width="16" height="16" viewBox="0 0 16 16" fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 10L8 5L13 10" stroke="#19181B" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+        </div>
+
+        <div class="frame-4">
+          <div class="frame-8">
+            <div class="frame-6">
+              <div class="all-title">Prompt Prefix</div>
+
+              <div class="prompt-prefix-div">
+                <textarea id="prompt-prefix" class="input-prompt" placeholder="請輸入 prompt prefix...">Masterpiece,Best Quality,High Quality,Highres,detail enhancement,((most beautiful image in the world))</textarea>
+              </div>
+            </div>
+
+            <div class="frame-7">
+              <div class="all-title">Negative Prompt</div>
+
+              <div class="negative-prompt-div">
+                <textarea id="negative-prompt" class="input-prompt" placeholder="請輸入 negative prompt...">nsfw</textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="frame-11">
+            <div class="frame-108">
+              <div class="frame-9">
+
+                <div class="frame-94">
+                  <div class="all-title">Steps</div>
+
+                  <div class="steps-number-div">
+                    <input id="steps-number" type="number" value="30" />
+                  </div>
+                </div>
+
+                <div class="slider-default">
+                  <div class="slider">
+                    <div class="left"></div>
+
+                    <div class="right">
+                      <div class="components-handle">
+                        <div class="handle"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="frame-112">
+
+                <div class="frame-942">
+                  <div class="all-title">CFG Scale</div>
+
+                  <div class="cfg-scale-number-div">
+                    <input id="cfg-scale-number" type="number" value="9" />
+                  </div>
+                </div>
+
+                <div class="slider-default2">
+                  <div class="slider2">
+                    <div class="left2"></div>
+
+                    <div class="right2">
+                      <div class="components-handle2">
+                        <div class="handle2"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="frame-97">
+
+              <div class="frame-95">
+                <div class="all-title">Seed</div>
+                <div class="seed-number-div" style="width: 182px;" >
+                  <input id="seed-number" type="number" value="-1" />
+                </div>
+              </div>
+
+              <div class="frame-98">
+
+                <div class="frame-972">
+                  <div class="all-title">Width</div>
+                  <div class="img-width-number-div" style="width: 108px;">
+                    <input id="img-width-number" type="number" value="512" />
+                  </div>
+                </div>
+
+                <div class="frame-96">
+                  <div class="all-title">Height</div>
+                  <div class="img-height-number-div" style="width: 108px;">
+                    <input id="img-height-number" type="number" value="512" />
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="rightDiv">
-      <img id="thumbnail"></img>
-      <div id="download-div" hidden="hidden"><a id="download-hyperlink" class="button">下載</a></div>
+    <div class="left-top-icon-div">
+      <img class="left-top-icon" src="assest/img/left-top-icon.png" />
     </div>
 
+    <div class="footer">
+      <div class="footer-bottom">
+        <div class="copyright">
+          Copyright © 2023 Cymkolor. All rights reserved.
+        </div>
+      </div>
+    </div>
   </div>
 
-  <iframe title="Texture Prompt Library"
+  <!-- <iframe title="Texture Prompt Library"
     style="background: #000000;"
     src="https://v2-embednotion.com/Texture-Library-bb9793325b834e10b029716eb4c04a87">
-  </iframe>
-
-  <div id="loadingOverlay">
-    <div id="loadingSpinner"></div>
-  </div>
+  </iframe> -->
 
   <script>
 
@@ -171,7 +208,17 @@
 
     function displayImage2() {
       const prompt = document.getElementById('input-prompt').value;
-      getTxt2ImgV2(prompt);
+      const prompt_prefix = document.getElementById('prompt-prefix').value;
+      const combined_prompt = `${prompt},${prompt_prefix}`;
+      const negative_prompt = document.getElementById('negative-prompt').value;
+
+      const steps = document.getElementById('steps-number').value;
+      const cfg_scale = document.getElementById('cfg-scale-number').value;
+      const seed = document.getElementById('seed-number').value;
+      const img_width = document.getElementById('img-width-number').value;
+      const img_height = document.getElementById('img-height-number').value;
+
+      getTxt2ImgV2(combined_prompt, negative_prompt, steps, cfg_scale, seed, img_width, img_height);
     }
 
     function base64ToHtmlImg(imageObj, base64FromImg) {
@@ -189,7 +236,7 @@
       // a.click(); //Downloaded file
     }
 
-    function getTxt2ImgV2(prompt) {
+    function getTxt2ImgV2(prompt, negative_prompt, steps, cfg_scale, seed, img_width, img_height) {
       // use jquery post
       const settings = {
         "url": "http://10.2.32.42:7860/sdapi/v1/txt2img",
@@ -216,7 +263,7 @@
           "styles": [
             ""
           ],
-          "seed": -1,
+          "seed": seed,
           "subseed": -1,
           "subseed_strength": 0,
           "seed_resize_from_h": -1,
@@ -224,15 +271,15 @@
           "sampler_name": "DPM++ 2M Karras",
           "batch_size": 1,
           "n_iter": 1,
-          "steps": 30,
-          "cfg_scale": 9,
-          "width": 512,
-          "height": 512,
+          "steps": steps,
+          "cfg_scale": cfg_scale,
+          "width": img_width,
+          "height": img_height,
           "restore_faces": false,
           "tiling": true,
           "do_not_save_samples": false,
           "do_not_save_grid": false,
-          "negative_prompt": "",
+          "negative_prompt": negative_prompt,
           "eta": 0,
           "s_churn": 0,
           "s_tmax": 0,
@@ -253,29 +300,16 @@
 
       $.ajax(settings).done(function (response) {
         const base64 = response['images'][0];
-        const imageObj = document.getElementById('thumbnail');
+        
+        const imageObj = document.createElement("img");
+        imageObj.classList.add("img-frame-104");
+        imageObj.setAttribute("onclick", "window.open(this.src)");
+        const img_div = document.querySelector('frame-1');
+        img_div.appendChild(imageObj);
         base64ToHtmlImg(imageObj, base64);
-        base64ToDownload(base64);
+        // base64ToDownload(base64);
         disableLoading();
       });
-    }
-
-    function showLoading() {
-      document.querySelectorAll('input, textarea, button, select').forEach(el => {
-        el.disabled = true;
-      });
-
-      const loadingOverlay = document.getElementById('loadingOverlay');
-      loadingOverlay.style.display = 'block';
-    }
-
-    function disableLoading() {
-      document.querySelectorAll('input, textarea, button, select').forEach(el => {
-        el.disabled = false;
-      });
-
-      const loadingOverlay = document.getElementById('loadingOverlay');
-      loadingOverlay.style.display = 'none';
     }
 
   </script>
