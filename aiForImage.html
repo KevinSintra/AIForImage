@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="css/txt2img.css">
   <link rel="stylesheet" href="css/my_component.css">
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"
-  integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+    integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
   <script src="js/my_component.js"></script>
   <title>Prompt Input and Image Display</title>
   <style>
@@ -42,7 +42,7 @@
       <div class="frame-100">
 
         <div class="frame-102">
-          <div class="frame-1">
+          <div id="img-frame" class="frame-1">
             <!-- <img class="img-frame-104" src="frame-104.png" onclick="window.open(this.src)" />
             <img class="img-frame-104" src="frame-105.png" onclick="window.open(this.src)" /> -->
           </div>
@@ -72,7 +72,8 @@
               <div class="all-title">Prompt Prefix</div>
 
               <div class="prompt-prefix-div">
-                <textarea id="prompt-prefix" class="input-prompt" placeholder="請輸入 prompt prefix...">Masterpiece,Best Quality,High Quality,Highres,detail enhancement,((most beautiful image in the world))</textarea>
+                <textarea id="prompt-prefix" class="input-prompt"
+                  placeholder="請輸入 prompt prefix...">Masterpiece,Best Quality,High Quality,Highres,detail enhancement,((most beautiful image in the world))</textarea>
               </div>
             </div>
 
@@ -140,7 +141,7 @@
 
               <div class="frame-95">
                 <div class="all-title">Seed</div>
-                <div class="seed-number-div" style="width: 182px;" >
+                <div class="seed-number-div" style="width: 182px;">
                   <input id="seed-number" type="number" value="-1" />
                 </div>
               </div>
@@ -222,25 +223,39 @@
     }
 
     function base64ToHtmlImg(imageObj, base64FromImg) {
-      imageObj.setAttribute('src', "data:image/png;base64," + base64FromImg);
+      const base64Combine = "data:image/png;base64," + base64FromImg;
+      imageObj.setAttribute('src', base64Combine);
+      imageObj.setAttribute("onclick", "javascript:downloadImg('" + base64Combine + "')");
     }
 
-    function base64ToDownload(base64FromImg) {
-      // const href = 'data:application/octet-stream;base64,' + base64FromImg;
-      // window.location.href = href;
-      var a = document.getElementById("download-hyperlink");
-      a.href = "data:image/png;base64," + base64FromImg; //Image Base64 Goes here
-      a.download = "Image.png"; //File name Here
-      var a_div = document.getElementById("download-div");
-      a_div.hidden = false;
-      // a.click(); //Downloaded file
+    function downloadImg(base64Img) {
+      showLoading();
+      // 將 base64 字串轉換為 Blob 物件
+      const byteString = atob(base64Img.split(',')[1]);
+      const mimeString = base64Img.split(',')[0].split(':')[1].split(';')[0];
+      const ab = new ArrayBuffer(byteString.length);
+      const ia = new Uint8Array(ab);
+      for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+      }
+      const blob = new Blob([ab], { type: mimeString });
+
+      // 建立下載用的連結
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = "image";
+
+      link.click(); //模擬點擊連結下載
+      window.URL.revokeObjectURL(url); //釋放連結資源
+      disableLoading();
     }
 
     function getTxt2ImgV2(prompt, negative_prompt, steps, cfg_scale, seed, img_width, img_height) {
       // use jquery post
       const settings = {
         "url": "http://10.2.32.42:7860/sdapi/v1/txt2img",
-        // "url": "https://9e94bedd-b471-415a.gradio.live/sdapi/v1/txt2img",
+        // "url": "https://0f5f4206-fdd1-4489-9bfd-f01266233592.mock.pstmn.io/sdapi/v1/txt2img",
         "method": "POST",
         "crossDomain": true,
         "timeout": 0,
@@ -300,14 +315,12 @@
 
       $.ajax(settings).done(function (response) {
         const base64 = response['images'][0];
-        
+
         const imageObj = document.createElement("img");
         imageObj.classList.add("img-frame-104");
-        imageObj.setAttribute("onclick", "window.open(this.src)");
-        const img_div = document.querySelector('frame-1');
+        const img_div = document.getElementById('img-frame');
         img_div.appendChild(imageObj);
         base64ToHtmlImg(imageObj, base64);
-        // base64ToDownload(base64);
         disableLoading();
       });
     }
