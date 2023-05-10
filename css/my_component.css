@@ -96,5 +96,56 @@
 
 /* show loading spinner - end */
 
+
+/* slidebar - start */
+/* html example
+<div class="slider-bar-container">
+  <input type="range" min="1" max="100" value="50" class="slider-bar" />
+</div> 
+*/
+
+.slider-bar-container {
+    width: 100%;
+}
+
+/* bar */
+.slider-bar {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 4px;
+    border-radius: 5px;
+    background: #39383c;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+.slider-bar:hover {
+    opacity: 1;
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
+.slider-bar::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    border: 2px solid #39383c;
+    border-radius: 50%;
+    background: #ffffff;
+    cursor: pointer;
+}
+
+.slider-bar::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #ffffff;
+    cursor: pointer;
+}
+
+/* slidebar - end */
+
 /* - start */
 /* - end */

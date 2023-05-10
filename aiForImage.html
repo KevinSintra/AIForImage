@@ -54,7 +54,10 @@
       </div>
 
       <div class="frame-99">
-        <div class="button-filled2">
+        
+        <button class="button-filled2" onclick="switchFrame4Visable()">進階</button>
+
+        <!-- <div class="button-filled2">
           <div class="label2">進階</div>
 
           <svg class="system-icon-outlined" width="16" height="16" viewBox="0 0 16 16" fill="none"
@@ -62,7 +65,7 @@
             <path d="M3 10L8 5L13 10" stroke="#19181B" stroke-width="2" stroke-linecap="round"
               stroke-linejoin="round" />
           </svg>
-        </div>
+        </div> -->
 
         <div class="frame-4">
           <div class="frame-8">
@@ -71,7 +74,7 @@
 
               <div class="prompt-prefix-div">
                 <textarea id="prompt-prefix" class="input-prompt"
-                  placeholder="請輸入 prompt prefix...">Masterpiece,Best Quality,High Quality,Highres,detail enhancement,((most beautiful image in the world))</textarea>
+                  placeholder="請輸入 prompt prefix...">texture,Masterpiece,Best Quality,High Quality,Highres,detail enhancement,((most beautiful image in the world))</textarea>
               </div>
             </div>
 
@@ -96,80 +99,65 @@
                   </div>
                 </div>
 
-                <div class="slider-default">
-                  <div class="slider">
-                    <div class="left"></div>
+                <div class="slider-bar-container">
+                  <input id="steps-slider-bar" type="range" min="1" max="150" value="30"
+                    class="slider-bar frame-9-slider" />
+                </div>
 
-                    <div class="right">
-                      <div class="components-handle">
-                        <div class="handle"></div>
-                      </div>
+                <div class="frame-112">
+
+                  <div class="frame-942">
+                    <div class="all-title">CFG Scale</div>
+
+                    <div class="cfg-scale-number-div">
+                      <input id="cfg-scale-number" type="number" value="9" />
                     </div>
                   </div>
-                </div>
 
+                  <div class="slider-bar-container">
+                    <input id="cfg-scale-slider-bar" type="range" min="1" max="30" value="9"
+                      class="slider-bar frame-9-slider" />
+                  </div>
+
+                </div>
               </div>
 
-              <div class="frame-112">
+              <div class="frame-97">
 
-                <div class="frame-942">
-                  <div class="all-title">CFG Scale</div>
-
-                  <div class="cfg-scale-number-div">
-                    <input id="cfg-scale-number" type="number" value="9" />
+                <div class="frame-95">
+                  <div class="all-title">Seed</div>
+                  <div class="seed-number-div" style="width: 182px;">
+                    <input id="seed-number" type="number" value="-1" />
                   </div>
                 </div>
 
-                <div class="slider-default2">
-                  <div class="slider2">
-                    <div class="left2"></div>
+                <div class="frame-98">
 
-                    <div class="right2">
-                      <div class="components-handle2">
-                        <div class="handle2"></div>
-                      </div>
+                  <div class="frame-972">
+                    <div class="all-title">Width</div>
+                    <div class="img-width-number-div" style="width: 108px;">
+                      <input id="img-width-number" type="number" value="512" />
                     </div>
                   </div>
-                </div>
 
-              </div>
-            </div>
-
-            <div class="frame-97">
-
-              <div class="frame-95">
-                <div class="all-title">Seed</div>
-                <div class="seed-number-div" style="width: 182px;">
-                  <input id="seed-number" type="number" value="-1" />
-                </div>
-              </div>
-
-              <div class="frame-98">
-
-                <div class="frame-972">
-                  <div class="all-title">Width</div>
-                  <div class="img-width-number-div" style="width: 108px;">
-                    <input id="img-width-number" type="number" value="512" />
+                  <div class="frame-96">
+                    <div class="all-title">Height</div>
+                    <div class="img-height-number-div" style="width: 108px;">
+                      <input id="img-height-number" type="number" value="512" />
+                    </div>
                   </div>
-                </div>
 
-                <div class="frame-96">
-                  <div class="all-title">Height</div>
-                  <div class="img-height-number-div" style="width: 108px;">
-                    <input id="img-height-number" type="number" value="512" />
-                  </div>
                 </div>
 
               </div>
-
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="left-top-icon-div">
-      <img class="left-top-icon" src="assest/img/left-top-icon.png" />
+      <div class="left-top-icon-div">
+        <img class="left-top-icon" src="assest/img/left-top-icon.png" />
+      </div>
     </div>
 
     <div class="footer">
@@ -179,14 +167,72 @@
         </div>
       </div>
     </div>
+
   </div>
 
-  <!-- <iframe title="Texture Prompt Library"
-    style="background: #000000;"
+  <!-- <iframe title="Texture Prompt Library" style="background: #000000;"
     src="https://v2-embednotion.com/Texture-Library-bb9793325b834e10b029716eb4c04a87">
   </iframe> -->
 
   <script>
+
+    // slider bar and number sync
+    const stepsSliderBar = document.getElementById('steps-slider-bar');
+    const stepsNumber = document.getElementById('steps-number');
+    stepsSliderBar.addEventListener('input', function () {
+      stepsNumber.value = stepsSliderBar.value;
+    });
+    stepsNumber.addEventListener('input', function () {
+      stepsSliderBar.value = stepsNumber.value;
+    });
+
+    const cfgScaleSliderBar = document.getElementById('cfg-scale-slider-bar');
+    const cfgScaleNumber = document.getElementById('cfg-scale-number');
+    cfgScaleSliderBar.addEventListener('input', function () {
+      cfgScaleNumber.value = cfgScaleSliderBar.value;
+    });
+    cfgScaleNumber.addEventListener('input', function () {
+      cfgScaleSliderBar.value = cfgScaleNumber.value;
+    });
+
+    const frame102Name = "frame-102";
+    const frame4Name = "frame-4";
+    const frame_102 = document.querySelector("." + frame102Name);
+    const frame_4 = document.querySelector("." + frame4Name);
+
+    // hidden frame
+    function hiddenFrame(frameName) {
+      var selectFrame = frame_4;
+      if (frameName == frame102Name) selectFrame = frame_102;
+
+      const hiddenFramName = "frame-hidden";
+      if (selectFrame.classList.contains(hiddenFramName)) return;
+
+      selectFrame.classList.remove(frameName);
+      selectFrame.classList.add(hiddenFramName);
+    }
+    // show frame
+    function showFrame(frameName) {
+      var selectFrame = frame_4;
+      if (frameName == frame102Name) selectFrame = frame_102;
+
+      if (selectFrame.classList.contains(frameName)) return;
+
+      const hiddenFramName = "frame-hidden";
+      selectFrame.classList.remove(hiddenFramName);
+      selectFrame.classList.add(frameName);
+    }
+
+    function switchFrame4Visable() {
+      if (frame_4.classList.contains("frame-hidden")) {
+        showFrame(frame4Name);
+      } else {
+        hiddenFrame(frame4Name);
+      }
+    }
+
+    hiddenFrame(frame102Name);
+    hiddenFrame(frame4Name);
 
     function displayImage() {
       const imageUrl = document.getElementById('input-prompt').value;
@@ -224,6 +270,7 @@
       const base64Combine = "data:image/png;base64," + base64FromImg;
       imageObj.setAttribute('src', base64Combine);
       imageObj.setAttribute("onclick", "javascript:downloadImg('" + base64Combine + "')");
+      showFrame(frame102Name);
     }
 
     function downloadImg(base64Img) {
