@@ -62,7 +62,7 @@
       </div>
 
       <div class="frame-99">
-        
+
         <button class="button-filled2" onclick="switchFrame4Visable()">進階</button>
 
         <!-- <div class="button-filled2">
@@ -262,7 +262,6 @@
     function displayImage2() {
       const prompt = document.getElementById('input-prompt').value;
       const prompt_prefix = document.getElementById('prompt-prefix').value;
-      const combined_prompt = `${prompt},${prompt_prefix}`;
       const negative_prompt = document.getElementById('negative-prompt').value;
 
       const steps = document.getElementById('steps-number').value;
@@ -271,7 +270,10 @@
       const img_width = document.getElementById('img-width-number').value;
       const img_height = document.getElementById('img-height-number').value;
 
-      getTxt2ImgV2(combined_prompt, negative_prompt, steps, cfg_scale, seed, img_width, img_height);
+      trans2Eng(prompt, (text) => {
+        const combined_prompt = `${text},${prompt_prefix}`;
+        getTxt2ImgV2(combined_prompt, negative_prompt, steps, cfg_scale, seed, img_width, img_height);
+      });
     }
 
     function base64ToHtmlImg(imageObj, base64FromImg) {
@@ -376,6 +378,36 @@
         base64ToHtmlImg(imageObj, base64);
         disableLoading();
       });
+    }
+
+    function trans2Eng(text, callback) {
+
+      const regex = /[\u4e00-\u9fa5]/;
+      if (!regex.test(text)) {
+        callback(text);
+        return;
+      }
+
+      const requestOptions = {
+        method: 'GET',
+        redirect: 'follow'
+      };
+
+      const url = `https://translation.googleapis.com/language/translate/v2?q=${text}&target=en&key=AIzaSyBMmbhYK2sYeyjLKMve46Odpgqtf5n4RHU`;
+
+      showLoading();
+
+      fetch(url, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+          const translatedText = result.data.translations[0].translatedText;
+          disableLoading();
+          callback(translatedText);
+        })
+        .catch(error => {
+          console.log('error', error)
+          disableLoading();
+        });
     }
 
   </script>
