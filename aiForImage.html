@@ -242,6 +242,30 @@
     hiddenFrame(frame102Name);
     hiddenFrame(frame4Name);
 
+    // select catch change
+    const select = document.getElementById("style-select");
+    var selectPrompt = "texture background,{realistic|natural|continuous collage,art|Tiling},detailed,close-up,top view,4K";
+    select.addEventListener("change", (event) => {
+      const selectedOption = select.options[select.selectedIndex];
+      switch (selectedOption.value) {
+        case 'random':
+          selectPrompt = "texture background,{realistic|natural|continuous collage,art|Tiling},detailed,close-up,top view,4K";
+          break;
+        case 'realistic':
+          selectPrompt = "texture background,realistic,detailed,close-up,top view,4K";
+          break;
+        case 'collageArt':
+          selectPrompt = "texture background,continuous collage,art,detailed,close-up,top view,4K";
+          break;
+        case 'tiling':
+          selectPrompt = "texture background,Tiling,detailed,close-up,top view,4K";
+          break;
+        default:
+          break;
+      }
+      console.log(selectPrompt);
+    });
+
     function displayImage() {
       const imageUrl = document.getElementById('input-prompt').value;
       // const imageUrl = `https://source.unsplash.com/800x800/?${promptInput}`;
@@ -271,7 +295,7 @@
       const img_height = document.getElementById('img-height-number').value;
 
       trans2Eng(prompt, (text) => {
-        const combined_prompt = `${text},${prompt_prefix}`;
+        const combined_prompt = `${text},${prompt_prefix},${selectPrompt}`;
         getTxt2ImgV2(combined_prompt, negative_prompt, steps, cfg_scale, seed, img_width, img_height);
       });
     }
