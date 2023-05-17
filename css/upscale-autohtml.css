@@ -1,3 +1,7 @@
+body {
+    background: #f7f9fb
+}
+
 .frame,
 .frame * {
     box-sizing: border-box;
@@ -5,8 +9,8 @@
 
 .frame {
     background: #f7f9fb;
-    width: 1440px;
-    height: 1024px;
+    width: 100vw;
+    height: 900px;
     position: relative;
     overflow: hidden;
 }
@@ -17,9 +21,8 @@
     gap: 0px;
     align-items: flex-start;
     justify-content: flex-start;
-    width: 1440px;
+    width: 100vw;
     position: absolute;
-    left: calc(50% - 720px);
     bottom: 0px;
 }
 
@@ -49,8 +52,10 @@
     align-items: flex-start;
     justify-content: flex-start;
     position: absolute;
-    left: 236px;
-    top: 212px;
+    align-items: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .rescale-resolution {
