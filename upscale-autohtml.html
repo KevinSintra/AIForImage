@@ -5,6 +5,8 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"
+    integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="./css/upscale-autohtml.css">
 
   <title>Document</title>
@@ -28,7 +30,7 @@
 
         <div class="frame-div">
 
-          <div class="img-container">
+          <div id="init-img-container" class="img-container">
             <div class="frame-init-img-tip">JPG, PNG, WebP, Up to 5MB</div>
 
             <svg class="small-img-svg" width="36" height="36" viewBox="0 0 36 36" fill="none"
@@ -39,7 +41,7 @@
             </svg>
           </div>
 
-          <div class="img-container">
+          <div id="upload-img-container" class="img-container">
             <img class="image-element" src="" />
           </div>
 
@@ -51,7 +53,7 @@
 
         <div class="frame-div">
 
-          <div class="frame-init-empty">
+          <div id="init-empty-container" class="frame-init-empty">
             <svg class="small-img-svg" width="36" height="36" viewBox="0 0 36 36" fill="none"
               xmlns="http://www.w3.org/2000/svg">
               <g clip-path="url(#clip0_61_9993)">
@@ -67,11 +69,11 @@
             </svg>
           </div>
 
-          <div class="img-container">
+          <div id="upscale-img-container" class="img-container">
             <img class="image-element" src="" />
           </div>
 
-          <div class="button-filled">
+          <div id="btn-download-upscale-img" class="button-filled">
             <div class="label">Download</div>
           </div>
         </div>
@@ -80,6 +82,18 @@
 
     </div>
   </div>
+
+  <script>
+    
+    // 畫面初始化
+    // 隱藏上傳圖片的容器
+    $("#upload-img-container").hide();
+    // 隱藏放大圖片的容器
+    $("#upscale-img-container").hide();
+    // 隱藏下載按鈕
+    $("#btn-download-upscale-img").hide();
+    
+  </script>
 
 </body>
 
