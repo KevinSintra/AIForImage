@@ -7,6 +7,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"
     integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+  <script src="js/my_component.js"></script>
+  <link rel="stylesheet" href="css/clear_all_style.css">
+  <link rel="stylesheet" href="css/my_component.css">
   <link rel="stylesheet" href="./css/upscale-autohtml.css">
 
   <title>Document</title>
@@ -42,12 +45,13 @@
           </div>
 
           <div id="upload-img-container" class="img-container">
-            <img class="image-element" src="" />
+            <img id="upload-img-element" class="image-element" src="" />
           </div>
 
-          <div class="button-outlined">
-            <div class="label-outlined">Upload</div>
-          </div>
+          <label class="custom-file-upload">
+            <input id="file-input-upload" type="file" accept="image/*" />
+            Upload
+          </label>
 
         </div>
 
@@ -70,11 +74,11 @@
           </div>
 
           <div id="upscale-img-container" class="img-container">
-            <img class="image-element" src="" />
+            <img id="upscale-img-element" class="image-element" src="" />
           </div>
 
           <div id="btn-download-upscale-img" class="button-filled">
-            <div class="label">Download</div>
+            <a class="alink-label" href="#" download>Download</a>
           </div>
         </div>
 
@@ -84,7 +88,7 @@
   </div>
 
   <script>
-    
+
     // 畫面初始化
     // 隱藏上傳圖片的容器
     $("#upload-img-container").hide();
@@ -92,7 +96,79 @@
     $("#upscale-img-container").hide();
     // 隱藏下載按鈕
     $("#btn-download-upscale-img").hide();
-    
+
+    // 上傳圖片
+    $("#file-input-upload").change(function () {
+
+      // 顯示上傳圖片的容器
+      $("#upload-img-container").show();
+      // 顯示放大圖片的容器
+      $("#upscale-img-container").show();
+      // 顯示下載按鈕
+      $("#btn-download-upscale-img").show();
+
+      // 隱藏預設圖片
+      $("#init-img-container").hide();
+      $("#init-empty-container").hide();
+
+      const file = this.files[0];
+      if (file) {
+
+        const preview = document.getElementById("upload-img-element");
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+
+        reader.onload = function () {
+          showLoading();
+          const base64String = reader.result.split(',')[1];
+          preview.src = "data:image/png;base64," + base64String;
+          sendBase64ToServer(base64String);
+        };
+      }
+    });
+
+    function sendBase64ToServer(base64String) {
+      var settings = {
+        "url": "http://10.2.32.42:7860/sdapi/v1/extra-single-image",
+        "method": "POST",
+        "crossDomain": true,
+        "timeout": 0,
+        "headers": {
+          "Content-Type": "application/json",
+          "Accept": "*/*",
+          "Access-Control-Allow-Origin": "*"
+        },
+        "data": JSON.stringify({
+          "resize_mode": 0,
+          "show_extras_results": true,
+          "gfpgan_visibility": 0,
+          "codeformer_visibility": 0,
+          "codeformer_weight": 0,
+          "upscaling_resize": 4,
+          "upscaling_resize_w": 512,
+          "upscaling_resize_h": 512,
+          "upscaling_crop": true,
+          "upscaler_1": "ESRGAN_4x",
+          "upscaler_2": "None",
+          "extras_upscaler_2_visibility": 0,
+          "upscale_first": false,
+          "image": base64String
+        }),
+      };
+
+      $.ajax(settings).done(function (response) {
+        const enlarge = document.getElementById("upscale-img-element");
+        const downloadLink = document.querySelector("#btn-download-upscale-img a");
+
+        const resultInfo = response["html_info"];
+        const imageBase64Info = response["image"];
+        enlarge.src = "data:image/png;base64," + imageBase64Info;
+        downloadLink.href = "data:image/png;base64," + imageBase64Info;
+        downloadLink.download = "image.png";
+        disableLoading();
+      });
+    }
+
   </script>
 
 </body>
